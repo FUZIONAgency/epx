@@ -91,7 +91,7 @@ const TopNav = () => {
           {/* Company Logo */}
           <div className="h-8 w-8">
             <img
-              src="/placeholder.svg"
+              src="https://ep5.exhibitpower.com/../upload/header.png"
               alt="Company Logo"
               className="h-full w-full object-contain"
             />
