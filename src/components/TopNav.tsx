@@ -33,15 +33,8 @@ const TopNav = () => {
   };
 
   return (
-    <nav 
-      className="border-b" 
-      style={{
-        backgroundImage: `url('https://ep5.exhibitpower.com/../upload/header.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}
-    >
-      <div className="flex h-16 items-center px-4 bg-black bg-opacity-50">
+    <nav className="border-b">
+      <div className="flex h-16 items-center px-4">
         {/* Left section */}
         <div className="flex items-center space-x-6">
           {/* App Logo */}
@@ -57,26 +50,26 @@ const TopNav = () => {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-white">Products</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Products</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid gap-3 p-4 w-[400px]">
-                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded text-white">
+                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded">
                       Product 1
                     </NavigationMenuLink>
-                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded text-white">
+                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded">
                       Product 2
                     </NavigationMenuLink>
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-white">Solutions</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid gap-3 p-4 w-[400px]">
-                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded text-white">
+                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded">
                       Solution 1
                     </NavigationMenuLink>
-                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded text-white">
+                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded">
                       Solution 2
                     </NavigationMenuLink>
                   </div>
@@ -94,7 +87,7 @@ const TopNav = () => {
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 bg-white bg-opacity-80"
+              className="pl-8"
             />
           </div>
         </div>
@@ -112,7 +105,7 @@ const TopNav = () => {
 
           {/* Notification Bell */}
           <button className="relative">
-            <Bell className="h-5 w-5 text-white" />
+            <Bell className="h-5 w-5" />
             <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
               3
             </span>
@@ -123,14 +116,14 @@ const TopNav = () => {
             <DropdownMenuTrigger className="flex items-center space-x-2">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user?.user_metadata?.avatar_url} />
-                <AvatarFallback className="text-white">
+                <AvatarFallback>
                   {user?.email?.charAt(0).toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-white">
+              <span className="text-sm font-medium">
                 {user?.email?.split("@")[0]}
               </span>
-              <ChevronDown className="h-4 w-4 text-white" />
+              <ChevronDown className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
