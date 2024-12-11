@@ -38,7 +38,13 @@ const TopNav = () => {
         {/* Left section */}
         <div className="flex items-center space-x-6">
           {/* App Logo */}
-          <div className="text-xl font-bold">YourApp</div>
+          <div className="text-xl font-bold h-10 w-32">
+            <img
+              src="https://ep5.exhibitpower.com/../upload/header.png"
+              alt="App Logo"
+              className="h-full w-full object-contain"
+            />
+          </div>
 
           {/* Main Navigation */}
           <NavigationMenu>
