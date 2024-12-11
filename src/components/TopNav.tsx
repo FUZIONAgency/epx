@@ -48,7 +48,7 @@ const TopNav = () => {
             {/* App Logo */}
             <div className="text-xl font-bold h-10 w-32">
               <img
-                src="https://ep5.exhibitpower.com/../upload/header.png"
+                src="https://luewnstegrjsnlucdkja.supabase.co/storage/v1/object/public/site/logoEP.png?t=2024-12-11T03%3A09%3A10.920Z"
                 alt="App Logo"
                 className="h-full w-full object-contain"
               />
