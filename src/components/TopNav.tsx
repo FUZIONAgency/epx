@@ -46,7 +46,7 @@ const TopNav = () => {
           {/* Left section */}
           <div className="flex items-center space-x-6">
             {/* App Logo */}
-            <div className="text-xl font-bold h-10 w-32">
+            <div className="text-xl font-bold h-10 w-32 flex items-start">
               <img
                 src="https://luewnstegrjsnlucdkja.supabase.co/storage/v1/object/public/site/WhiteLogo.png"
                 alt="App Logo"
