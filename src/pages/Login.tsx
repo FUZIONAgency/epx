@@ -3,7 +3,7 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,7 +11,11 @@ const Login = () => {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        toast.error('Error checking authentication status');
+        console.error('Auth error:', error);
+      }
       if (session) {
         navigate('/');
       }
@@ -21,9 +25,13 @@ const Login = () => {
     checkUser();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session) {
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
           navigate('/');
+        } else if (event === 'SIGNED_OUT') {
+          navigate('/login');
+        } else if (event === 'USER_UPDATED') {
+          console.log('User updated:', session);
         }
       }
     );
@@ -34,7 +42,11 @@ const Login = () => {
   }, [navigate]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
   }
 
   return (
@@ -60,6 +72,16 @@ const Login = () => {
               },
             }}
             providers={[]}
+            onError={(error) => {
+              console.error('Auth error:', error);
+              if (error.message.includes('email_address_invalid')) {
+                toast.error('Please enter a valid email address');
+              } else if (error.message.includes('invalid_credentials')) {
+                toast.error('Invalid email or password');
+              } else {
+                toast.error(error.message);
+              }
+            }}
           />
         </div>
       </div>
