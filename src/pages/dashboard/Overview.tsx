@@ -28,8 +28,7 @@ const Overview = () => {
           *,
           deals_status(name),
           companies(name)
-        `)
-        .order('created_at', { ascending: false });
+        `);
       
       if (error) {
         console.error("Error fetching deals:", error);
@@ -37,7 +36,13 @@ const Overview = () => {
         throw error;
       }
       
-      console.log("Fetched deals:", data);
+      console.log("Raw deals data:", data);
+      console.log("Number of deals fetched:", data?.length);
+      if (data?.length > 0) {
+        console.log("Sample deal values:", data.map(d => ({ id: d.id, value: d.value })));
+        console.log("Total value:", data.reduce((sum, deal) => sum + (deal.value ?? 0), 0));
+      }
+      
       return data;
     },
   });
@@ -68,12 +73,11 @@ const Overview = () => {
 
   // Calculate key metrics
   const totalValue = dealsData?.reduce((sum, deal) => {
-    // Since deal.value is already numeric, we just need to ensure it's not null
     const dealValue = deal.value ?? 0;
     return sum + dealValue;
-  }, 0) || 0;
+  }, 0) ?? 0; // Use ?? 0 here instead of || 0 to handle the case where dealsData is undefined
   
-  const activeDeals = dealsData?.length || 0;
+  const activeDeals = dealsData?.length ?? 0;
   const avgDealValue = activeDeals ? totalValue / activeDeals : 0;
   
   // Calculate deals by status for the chart
@@ -88,9 +92,9 @@ const Overview = () => {
     acc[status].count += 1;
     acc[status].value += deal.value ?? 0;
     return acc;
-  }, {});
+  }, {}) ?? {};
 
-  const chartData = Object.entries(dealsByStatus || {}).map(([name, data]: [string, any]) => ({
+  const chartData = Object.entries(dealsByStatus).map(([name, data]: [string, any]) => ({
     name,
     count: data.count,
     value: data.value,
