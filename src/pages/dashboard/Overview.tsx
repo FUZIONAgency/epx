@@ -28,7 +28,8 @@ const Overview = () => {
           *,
           deals_status(name),
           companies(name)
-        `);
+        `)
+        .order('created_at', { ascending: false });
       
       if (error) {
         console.error("Error fetching deals:", error);
@@ -67,7 +68,8 @@ const Overview = () => {
 
   // Calculate key metrics
   const totalValue = dealsData?.reduce((sum, deal) => {
-    const dealValue = typeof deal.value === 'number' ? deal.value : 0;
+    // Ensure we're working with numeric values
+    const dealValue = parseFloat(deal.value) || 0;
     return sum + dealValue;
   }, 0) || 0;
   
@@ -84,7 +86,7 @@ const Overview = () => {
       };
     }
     acc[status].count += 1;
-    acc[status].value += typeof deal.value === 'number' ? deal.value : 0;
+    acc[status].value += parseFloat(deal.value) || 0;
     return acc;
   }, {});
 
