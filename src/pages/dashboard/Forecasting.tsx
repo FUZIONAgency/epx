@@ -93,7 +93,7 @@ const Forecasting = () => {
           <CardTitle>Monthly Revenue Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-[400px]">
+          <div className="h-[500px]">
             <ChartContainer config={chartConfig}>
               <LineChart data={trendData}>
                 <XAxis dataKey="date" />
