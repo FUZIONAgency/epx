@@ -37,9 +37,8 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={session ? <Index /> : <Navigate to="/login" />} />
+              <Route path="/*" element={session ? <Index /> : <Navigate to="/login" />} />
               <Route path="/login" element={!session ? <Login /> : <Navigate to="/" />} />
-              <Route path="*" element={<Navigate to="/" replace />} /> {/* Add catch-all route */}
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
