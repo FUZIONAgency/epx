@@ -68,8 +68,8 @@ const Overview = () => {
 
   // Calculate key metrics
   const totalValue = dealsData?.reduce((sum, deal) => {
-    // Ensure we're working with numeric values
-    const dealValue = parseFloat(deal.value) || 0;
+    // Since deal.value is already numeric, we just need to ensure it's not null
+    const dealValue = deal.value ?? 0;
     return sum + dealValue;
   }, 0) || 0;
   
@@ -86,7 +86,7 @@ const Overview = () => {
       };
     }
     acc[status].count += 1;
-    acc[status].value += parseFloat(deal.value) || 0;
+    acc[status].value += deal.value ?? 0;
     return acc;
   }, {});
 
