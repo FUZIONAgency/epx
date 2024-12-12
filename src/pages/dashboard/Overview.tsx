@@ -21,6 +21,7 @@ const Overview = () => {
   const { data: dealsData, isLoading, error } = useQuery({
     queryKey: ["deals-overview"],
     queryFn: async () => {
+      console.log("Fetching deals data...");
       const { data, error } = await supabase
         .from("deals")
         .select(`
@@ -28,10 +29,14 @@ const Overview = () => {
           deals_status(name),
           companies(name)
         `);
+      
       if (error) {
+        console.error("Error fetching deals:", error);
         toast.error("Failed to fetch deals data");
         throw error;
       }
+      
+      console.log("Fetched deals:", data);
       return data;
     },
   });
@@ -61,17 +66,25 @@ const Overview = () => {
   }
 
   // Calculate key metrics
-  const totalValue = dealsData?.reduce((sum, deal) => sum + (deal.value || 0), 0) || 0;
+  const totalValue = dealsData?.reduce((sum, deal) => {
+    const dealValue = typeof deal.value === 'number' ? deal.value : 0;
+    return sum + dealValue;
+  }, 0) || 0;
+  
   const activeDeals = dealsData?.length || 0;
   const avgDealValue = activeDeals ? totalValue / activeDeals : 0;
   
   // Calculate deals by status for the chart
   const dealsByStatus = dealsData?.reduce((acc: any, deal) => {
     const status = deal.deals_status?.name || "Unknown";
-    acc[status] = {
-      count: (acc[status]?.count || 0) + 1,
-      value: (acc[status]?.value || 0) + (deal.value || 0),
-    };
+    if (!acc[status]) {
+      acc[status] = {
+        count: 0,
+        value: 0,
+      };
+    }
+    acc[status].count += 1;
+    acc[status].value += typeof deal.value === 'number' ? deal.value : 0;
     return acc;
   }, {});
 
