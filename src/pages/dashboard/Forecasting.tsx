@@ -56,7 +56,8 @@ const Forecasting = () => {
     const movingAverage = values.map((_, index) => {
       if (index < 2) return null;
       const slice = values.slice(index - 2, index + 1);
-      return slice.reduce((sum, val) => sum + val, 0) / 3;
+      const average = slice.reduce((sum, val) => sum + val, 0) / 3;
+      return Number(average.toFixed(2)); // Round to 2 decimal places
     });
     
     return monthlyData.map((data, index) => ({
