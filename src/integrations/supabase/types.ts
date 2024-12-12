@@ -9,6 +9,121 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      companies: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string | null
+        }
+        Relationships: []
+      }
+      deals: {
+        Row: {
+          closed_at: string | null
+          company_id: string | null
+          created_at: string | null
+          "deal-code": string | null
+          description: string | null
+          id: string
+          owned_by_person_id: string | null
+          status_id: string | null
+          value: number | null
+        }
+        Insert: {
+          closed_at?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          "deal-code"?: string | null
+          description?: string | null
+          id?: string
+          owned_by_person_id?: string | null
+          status_id?: string | null
+          value?: number | null
+        }
+        Update: {
+          closed_at?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          "deal-code"?: string | null
+          description?: string | null
+          id?: string
+          owned_by_person_id?: string | null
+          status_id?: string | null
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_owned_by_person_id_fkey"
+            columns: ["owned_by_person_id"]
+            isOneToOne: false
+            referencedRelation: "persons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_status_id_fkey"
+            columns: ["status_id"]
+            isOneToOne: false
+            referencedRelation: "deals_status"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals_status: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      persons: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
