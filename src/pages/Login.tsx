@@ -72,14 +72,24 @@ const Login = () => {
               },
             }}
             providers={[]}
-            onError={(error) => {
-              console.error('Auth error:', error);
-              if (error.message.includes('email_address_invalid')) {
-                toast.error('Please enter a valid email address');
-              } else if (error.message.includes('invalid_credentials')) {
-                toast.error('Invalid email or password');
-              } else {
-                toast.error(error.message);
+            localization={{
+              variables: {
+                sign_in: {
+                  email_input_placeholder: 'Your email address',
+                  password_input_placeholder: 'Your password',
+                  email_label: 'Email address',
+                  password_label: 'Password',
+                  button_label: 'Sign in',
+                  loading_button_label: 'Signing in ...',
+                },
+                sign_up: {
+                  email_input_placeholder: 'Your email address',
+                  password_input_placeholder: 'Your password',
+                  email_label: 'Email address',
+                  password_label: 'Password',
+                  button_label: 'Sign up',
+                  loading_button_label: 'Signing up ...',
+                },
               }
             }}
           />
