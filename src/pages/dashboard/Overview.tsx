@@ -21,7 +21,7 @@ const Overview = () => {
   const { data: dealsData, isLoading, error } = useQuery({
     queryKey: ["deals-overview"],
     queryFn: async () => {
-      console.log("Fetching deals data...");
+      console.log("Starting deals fetch...");
       const { data, error } = await supabase
         .from("deals")
         .select(`
@@ -36,11 +36,18 @@ const Overview = () => {
         throw error;
       }
       
+      // Detailed logging to debug the issue
       console.log("Raw deals data:", data);
-      console.log("Number of deals fetched:", data?.length);
+      console.log("Number of deals:", data?.length);
       if (data?.length > 0) {
-        console.log("Sample deal values:", data.map(d => ({ id: d.id, value: d.value })));
-        console.log("Total value:", data.reduce((sum, deal) => sum + (deal.value ?? 0), 0));
+        console.log("All deal values:", data.map(d => ({ id: d.id, value: d.value })));
+        const total = data.reduce((sum, deal) => {
+          console.log(`Adding deal value: ${deal.value} to sum: ${sum}`);
+          return sum + (deal.value || 0);
+        }, 0);
+        console.log("Calculated total value:", total);
+      } else {
+        console.log("No deals found in the response");
       }
       
       return data;
@@ -71,11 +78,13 @@ const Overview = () => {
     );
   }
 
-  // Calculate key metrics
+  // Calculate key metrics with detailed logging
   const totalValue = dealsData?.reduce((sum, deal) => {
-    const dealValue = deal.value ?? 0;
-    return sum + dealValue;
-  }, 0) ?? 0; // Use ?? 0 here instead of || 0 to handle the case where dealsData is undefined
+    console.log(`Processing deal ${deal.id}: value = ${deal.value}`);
+    return sum + (Number(deal.value) || 0);
+  }, 0) ?? 0;
+  
+  console.log("Final calculated total value:", totalValue);
   
   const activeDeals = dealsData?.length ?? 0;
   const avgDealValue = activeDeals ? totalValue / activeDeals : 0;
@@ -90,7 +99,7 @@ const Overview = () => {
       };
     }
     acc[status].count += 1;
-    acc[status].value += deal.value ?? 0;
+    acc[status].value += Number(deal.value) || 0;
     return acc;
   }, {}) ?? {};
 
@@ -99,23 +108,6 @@ const Overview = () => {
     count: data.count,
     value: data.value,
   }));
-
-  const chartConfig = {
-    deals: {
-      label: "Deal Count",
-      theme: {
-        light: "#3b82f6",
-        dark: "#60a5fa",
-      },
-    },
-    value: {
-      label: "Deal Value",
-      theme: {
-        light: "#10b981",
-        dark: "#34d399",
-      },
-    },
-  };
 
   return (
     <div className="p-6 space-y-6">
@@ -171,7 +163,22 @@ const Overview = () => {
         </CardHeader>
         <CardContent>
           <div className="h-[400px]">
-            <ChartContainer config={chartConfig}>
+            <ChartContainer config={{
+              deals: {
+                label: "Deal Count",
+                theme: {
+                  light: "#3b82f6",
+                  dark: "#60a5fa",
+                },
+              },
+              value: {
+                label: "Deal Value",
+                theme: {
+                  light: "#10b981",
+                  dark: "#34d399",
+                },
+              },
+            }}>
               <BarChart data={chartData}>
                 <XAxis dataKey="name" />
                 <YAxis yAxisId="left" orientation="left" />
