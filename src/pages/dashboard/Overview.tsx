@@ -14,10 +14,11 @@ import {
 } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
 import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const Overview = () => {
   // Fetch all deals with their status
-  const { data: dealsData } = useQuery({
+  const { data: dealsData, isLoading, error } = useQuery({
     queryKey: ["deals-overview"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -27,10 +28,37 @@ const Overview = () => {
           deals_status(name),
           companies(name)
         `);
-      if (error) throw error;
+      if (error) {
+        toast.error("Failed to fetch deals data");
+        throw error;
+      }
       return data;
     },
   });
+
+  if (isLoading) {
+    return (
+      <div className="p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 w-48 bg-gray-200 rounded"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-32 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+          <div className="h-[400px] bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="text-red-500">Error loading dashboard data. Please try again later.</div>
+      </div>
+    );
+  }
 
   // Calculate key metrics
   const totalValue = dealsData?.reduce((sum, deal) => sum + (deal.value || 0), 0) || 0;
