@@ -17,18 +17,13 @@ import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
 import { toast } from "sonner";
 
 const Overview = () => {
-  // Fetch all deals with their status
   const { data: dealsData, isLoading, error } = useQuery({
     queryKey: ["deals-overview"],
     queryFn: async () => {
       console.log("Starting deals fetch...");
       const { data, error } = await supabase
         .from("deals")
-        .select(`
-          *,
-          deals_status(name),
-          companies(name)
-        `);
+        .select("*, deals_status(name), companies(name)");
       
       if (error) {
         console.error("Error fetching deals:", error);
@@ -43,7 +38,7 @@ const Overview = () => {
         console.log("All deal values:", data.map(d => ({ id: d.id, value: d.value })));
         const total = data.reduce((sum, deal) => {
           console.log(`Adding deal value: ${deal.value} to sum: ${sum}`);
-          return sum + (deal.value || 0);
+          return sum + (Number(deal.value) || 0);
         }, 0);
         console.log("Calculated total value:", total);
       } else {
@@ -88,7 +83,7 @@ const Overview = () => {
   
   const activeDeals = dealsData?.length ?? 0;
   const avgDealValue = activeDeals ? totalValue / activeDeals : 0;
-  
+
   // Calculate deals by status for the chart
   const dealsByStatus = dealsData?.reduce((acc: any, deal) => {
     const status = deal.deals_status?.name || "Unknown";
