@@ -63,6 +63,16 @@ const Companies = () => {
       value: company.totalValue,
     }));
 
+  const chartConfig = {
+    companies: {
+      label: "Company Distribution",
+      theme: {
+        light: "#3b82f6",
+        dark: "#60a5fa"
+      }
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold">Company Analytics</h1>
@@ -73,7 +83,7 @@ const Companies = () => {
         </CardHeader>
         <CardContent>
           <div className="h-[300px] flex justify-center">
-            <ChartContainer>
+            <ChartContainer config={chartConfig}>
               <PieChart>
                 <Pie
                   data={pieData}

@@ -51,7 +51,6 @@ const Forecasting = () => {
 
   const monthlyData = getMonthlyData();
   
-  // Calculate simple moving average for trend
   const calculateTrend = () => {
     const values = monthlyData.map(d => d.value);
     const movingAverage = values.map((_, index) => {
@@ -68,6 +67,23 @@ const Forecasting = () => {
 
   const trendData = calculateTrend();
 
+  const chartConfig = {
+    actual: {
+      label: "Actual Revenue",
+      theme: {
+        light: "#3b82f6",
+        dark: "#60a5fa"
+      }
+    },
+    trend: {
+      label: "Trend",
+      theme: {
+        light: "#10b981",
+        dark: "#34d399"
+      }
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold">Sales Forecasting</h1>
@@ -78,20 +94,20 @@ const Forecasting = () => {
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">
-            <ChartContainer>
+            <ChartContainer config={chartConfig}>
               <LineChart data={trendData}>
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Line
                   type="monotone"
                   dataKey="value"
-                  stroke="#3b82f6"
+                  stroke="var(--color-actual)"
                   name="Actual"
                 />
                 <Line
                   type="monotone"
                   dataKey="trend"
-                  stroke="#10b981"
+                  stroke="var(--color-trend)"
                   name="Trend"
                   strokeDasharray="5 5"
                 />

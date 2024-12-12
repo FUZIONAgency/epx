@@ -56,6 +56,16 @@ const Performance = () => {
     value: data.totalValue,
   }));
 
+  const chartConfig = {
+    sales: {
+      label: "Sales Performance",
+      theme: {
+        light: "#3b82f6",
+        dark: "#60a5fa"
+      }
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold">Sales Performance</h1>
@@ -66,11 +76,11 @@ const Performance = () => {
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">
-            <ChartContainer>
+            <ChartContainer config={chartConfig}>
               <BarChart data={chartData}>
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Bar dataKey="value" fill="#3b82f6" />
+                <Bar dataKey="value" fill="var(--color-sales)" />
                 <ChartTooltip />
                 <ChartLegend />
               </BarChart>

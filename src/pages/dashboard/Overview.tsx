@@ -12,7 +12,7 @@ import {
   ChartTooltip,
   ChartLegend,
 } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis } from "recharts";
 
 const Overview = () => {
   const { data: dealsData } = useQuery({
@@ -39,6 +39,16 @@ const Overview = () => {
     name,
     value,
   }));
+
+  const chartConfig = {
+    deals: {
+      label: "Deals by Status",
+      theme: {
+        light: "#3b82f6",
+        dark: "#60a5fa"
+      }
+    }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -78,17 +88,17 @@ const Overview = () => {
         </Card>
       </div>
 
-      <Card className="col-span-2">
+      <Card>
         <CardHeader>
           <CardTitle>Deals by Status</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">
-            <ChartContainer>
+            <ChartContainer config={chartConfig}>
               <BarChart data={chartData}>
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Bar dataKey="value" fill="#3b82f6" />
+                <Bar dataKey="value" fill="var(--color-deals)" />
                 <ChartTooltip />
                 <ChartLegend />
               </BarChart>
