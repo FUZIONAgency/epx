@@ -7,6 +7,8 @@ import {
   Timer,
   ChartLine,
   User,
+  PanelLeftClose,
+  PanelLeft,
 } from "lucide-react";
 import {
   Sidebar,
@@ -17,7 +19,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
 export const menuItems = [
   {
@@ -55,12 +59,27 @@ export const menuItems = [
 export function DashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { open, setOpen } = useSidebar();
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+          <div className="flex items-center justify-between px-2 mb-2">
+            <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setOpen(!open)}
+              className="h-7 w-7"
+            >
+              {open ? (
+                <PanelLeftClose className="h-4 w-4" />
+              ) : (
+                <PanelLeft className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
