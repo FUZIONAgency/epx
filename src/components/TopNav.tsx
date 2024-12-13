@@ -18,6 +18,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 
@@ -31,6 +36,17 @@ const TopNav = () => {
     await supabase.auth.signOut();
     navigate("/login");
   };
+
+  const navigationItems = [
+    {
+      trigger: "Products",
+      items: ["Product 1", "Product 2"],
+    },
+    {
+      trigger: "Solutions",
+      items: ["Solution 1", "Solution 2"],
+    },
+  ];
 
   return (
     <nav className="border-b bg-white">
@@ -46,41 +62,36 @@ const TopNav = () => {
             />
           </div>
 
-          {/* Main Navigation */}
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-black">Products</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid gap-3 p-4 w-[400px] bg-white text-black">
-                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded">
-                      Product 1
-                    </NavigationMenuLink>
-                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded">
-                      Product 2
-                    </NavigationMenuLink>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-black">Solutions</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid gap-3 p-4 w-[400px] bg-white text-black">
-                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded">
-                      Solution 1
-                    </NavigationMenuLink>
-                    <NavigationMenuLink className="cursor-pointer hover:bg-accent p-2 rounded">
-                      Solution 2
-                    </NavigationMenuLink>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+          {/* Main Navigation - Hidden on mobile, visible on desktop */}
+          <div className="hidden md:block">
+            <NavigationMenu>
+              <NavigationMenuList>
+                {navigationItems.map((nav) => (
+                  <NavigationMenuItem key={nav.trigger}>
+                    <NavigationMenuTrigger className="text-black">
+                      {nav.trigger}
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <div className="grid gap-3 p-4 w-[400px] bg-white text-black">
+                        {nav.items.map((item) => (
+                          <NavigationMenuLink
+                            key={item}
+                            className="cursor-pointer hover:bg-accent p-2 rounded"
+                          >
+                            {item}
+                          </NavigationMenuLink>
+                        ))}
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
         </div>
 
-        {/* Search Box */}
-        <div className="flex-1 px-6">
+        {/* Search Box - Hidden on mobile */}
+        <div className="flex-1 px-6 hidden md:block">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
             <Input
@@ -93,9 +104,9 @@ const TopNav = () => {
         </div>
 
         {/* Right section */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-6 ml-auto">
           {/* Company Logo */}
-          <div className="h-8 w-8">
+          <div className="h-8 w-8 hidden md:block">
             <img
               src="https://ep5.exhibitpower.com/../upload/header.png"
               alt="Company Logo"
@@ -120,10 +131,10 @@ const TopNav = () => {
                   {user?.email?.charAt(0).toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-black">
+              <span className="text-sm font-medium text-black hidden md:block">
                 {user?.email?.split("@")[0]}
               </span>
-              <ChevronDown className="h-4 w-4 text-black" />
+              <ChevronDown className="h-4 w-4 text-black hidden md:block" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -136,6 +147,45 @@ const TopNav = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Mobile Menu */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger>
+                <Menu className="h-6 w-6" />
+              </SheetTrigger>
+              <SheetContent side="right">
+                <div className="flex flex-col space-y-4 mt-4">
+                  {/* Mobile Search */}
+                  <div className="relative">
+                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                    <Input
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-8 bg-white border-gray-200"
+                    />
+                  </div>
+
+                  {/* Mobile Navigation */}
+                  {navigationItems.map((nav) => (
+                    <div key={nav.trigger} className="space-y-2">
+                      <h2 className="font-medium text-lg">{nav.trigger}</h2>
+                      {nav.items.map((item) => (
+                        <a
+                          key={item}
+                          href="#"
+                          className="block p-2 hover:bg-accent rounded"
+                        >
+                          {item}
+                        </a>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </nav>
