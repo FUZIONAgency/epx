@@ -83,14 +83,7 @@ const Login = () => {
               },
             }}
             providers={[]}
-            onSuccess={(response) => {
-              console.log('Authentication successful:', response);
-              navigate('/');
-            }}
-            onError={(error) => {
-              console.error('Authentication error:', error);
-              toast.error('Login failed. Please check your credentials.');
-            }}
+            redirectTo={window.location.origin}
             localization={{
               variables: {
                 sign_in: {
