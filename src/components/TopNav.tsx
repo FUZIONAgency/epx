@@ -3,14 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { Bell, ChevronDown, Search, Menu } from "lucide-react";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -25,6 +17,7 @@ import {
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import { menuItems } from "@/components/DashboardSidebar";
 
 const TopNav = () => {
   const navigate = useNavigate();
@@ -36,17 +29,6 @@ const TopNav = () => {
     await supabase.auth.signOut();
     navigate("/login");
   };
-
-  const navigationItems = [
-    {
-      trigger: "Products",
-      items: ["Product 1", "Product 2"],
-    },
-    {
-      trigger: "Solutions",
-      items: ["Solution 1", "Solution 2"],
-    },
-  ];
 
   return (
     <nav className="border-b bg-white">
@@ -60,33 +42,6 @@ const TopNav = () => {
               alt="App Logo"
               className="h-full w-full object-contain"
             />
-          </div>
-
-          {/* Main Navigation - Hidden on mobile, visible on desktop */}
-          <div className="hidden md:block">
-            <NavigationMenu>
-              <NavigationMenuList>
-                {navigationItems.map((nav) => (
-                  <NavigationMenuItem key={nav.trigger}>
-                    <NavigationMenuTrigger className="text-black">
-                      {nav.trigger}
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <div className="grid gap-3 p-4 w-[400px] bg-white text-black">
-                        {nav.items.map((item) => (
-                          <NavigationMenuLink
-                            key={item}
-                            className="cursor-pointer hover:bg-accent p-2 rounded"
-                          >
-                            {item}
-                          </NavigationMenuLink>
-                        ))}
-                      </div>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
           </div>
         </div>
 
@@ -167,21 +122,21 @@ const TopNav = () => {
                     />
                   </div>
 
-                  {/* Mobile Navigation */}
-                  {navigationItems.map((nav) => (
-                    <div key={nav.trigger} className="space-y-2">
-                      <h2 className="font-medium text-lg">{nav.trigger}</h2>
-                      {nav.items.map((item) => (
-                        <a
-                          key={item}
-                          href="#"
-                          className="block p-2 hover:bg-accent rounded"
-                        >
-                          {item}
-                        </a>
-                      ))}
-                    </div>
-                  ))}
+                  {/* Mobile Navigation using Sidebar Menu Items */}
+                  <div className="space-y-2">
+                    {menuItems.map((item) => (
+                      <button
+                        key={item.title}
+                        onClick={() => {
+                          navigate(item.path);
+                        }}
+                        className="flex items-center space-x-2 w-full p-2 hover:bg-accent rounded-md"
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
