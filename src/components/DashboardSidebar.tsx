@@ -19,7 +19,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-const menuItems = [
+export const menuItems = [
   {
     title: "Overview",
     path: "/dashboard",
