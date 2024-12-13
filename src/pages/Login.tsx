@@ -11,21 +11,32 @@ const Login = () => {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error) {
-        toast.error('Error checking authentication status');
-        console.error('Auth error:', error);
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Session check error:', error);
+          toast.error('Error checking authentication status');
+        }
+        
+        if (session) {
+          navigate('/');
+        }
+        
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Unexpected error during session check:', err);
+        toast.error('An unexpected error occurred');
+        setIsLoading(false);
       }
-      if (session) {
-        navigate('/');
-      }
-      setIsLoading(false);
     };
 
     checkUser();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state change event:', event);
+        
         if (event === 'SIGNED_IN' && session) {
           navigate('/');
         } else if (event === 'SIGNED_OUT') {
@@ -72,6 +83,14 @@ const Login = () => {
               },
             }}
             providers={[]}
+            onSuccess={(response) => {
+              console.log('Authentication successful:', response);
+              navigate('/');
+            }}
+            onError={(error) => {
+              console.error('Authentication error:', error);
+              toast.error('Login failed. Please check your credentials.');
+            }}
             localization={{
               variables: {
                 sign_in: {
