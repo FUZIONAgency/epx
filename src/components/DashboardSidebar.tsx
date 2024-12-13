@@ -91,6 +91,7 @@ export function DashboardSidebar() {
                         : ""
                     }
                     onClick={() => navigate(item.path)}
+                    tooltip={!open ? item.title : undefined}
                   >
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
