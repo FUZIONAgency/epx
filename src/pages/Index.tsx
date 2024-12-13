@@ -16,7 +16,7 @@ const Index = () => {
       <SidebarProvider>
         <div className="flex min-h-[calc(100vh-4rem)]">
           <DashboardSidebar />
-          <main className="flex-1 overflow-y-auto">
+          <main className="flex-1 overflow-y-auto w-full px-4 md:px-6">
             <Routes>
               <Route path="/" element={<Overview />} />
               <Route path="/dashboard" element={<Overview />} />
