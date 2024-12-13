@@ -33,7 +33,7 @@ const Pipeline = () => {
         .from("deals")
         .select(`
           *,
-          deals_status(name),
+          deals_status(id, name),
           companies(name),
           persons(name)
         `);
@@ -60,24 +60,32 @@ const Pipeline = () => {
     const dealId = result.draggableId;
     
     // Find the status ID for the destination column
-    const destinationStatusData = await supabase
+    const { data: statusData, error: statusError } = await supabase
       .from('deals_status')
       .select('id')
       .eq('name', destinationStatus)
       .single();
 
-    if (destinationStatusData.error) {
+    if (statusError) {
+      console.error('Error fetching status:', statusError);
+      toast.error('Failed to update deal status');
+      return;
+    }
+
+    if (!statusData?.id) {
+      console.error('No status found for:', destinationStatus);
       toast.error('Failed to update deal status');
       return;
     }
 
     // Update the deal's status
-    const { error } = await supabase
+    const { error: updateError } = await supabase
       .from('deals')
-      .update({ status_id: destinationStatusData.data.id })
+      .update({ status_id: statusData.id })
       .eq('id', dealId);
 
-    if (error) {
+    if (updateError) {
+      console.error('Error updating deal:', updateError);
       toast.error('Failed to update deal status');
       return;
     }
