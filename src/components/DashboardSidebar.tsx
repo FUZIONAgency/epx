@@ -63,7 +63,7 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="pt-16"> {/* Added pt-16 to match top header height */}
         <SidebarGroup>
           <div className="flex items-center justify-between px-2 mb-2">
             <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
